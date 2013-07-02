@@ -21,7 +21,7 @@ class CNeuralStruct:
 		
 		self.Reset()							#set the structure to it's initial state
 		
-		self.file_name=open('H:Data/BrainSim'+name,'w')	#prepare the log file for saving the simulation
+		self.file_name=open('C:\\Users\\uqkweegi\\Dropbox\\Code\\Matlab\\PPpaper\\'+name,'w') #'H:Data/BrainSim'+name,'w')	#prepare the log file for saving the simulation
 	
 #----------------------------------------------#	
 	#destroy object
@@ -170,7 +170,7 @@ def main():
 	
 	dt 			= 	0.001	#time step
 	sim_time 	= 	0.999		#total simulation time
-	DA			= 	0.8		#dopamine level for simulation
+	DA			= 	0.0		#dopamine level for simulation
 	
 				#This matrix represents the coupling between each strucutre, and sets the structures synaptic response
 				#	 GPi  GPe  D1  D2   STN FS  Ctx  	   Tha  TRN  tau   [Sigmoid]  R

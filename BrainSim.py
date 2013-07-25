@@ -21,7 +21,7 @@ class CNeuralStruct:
 		
 		self.Reset()							#set the structure to it's initial state
 		
-		self.file_name=open('C:\\Users\\uqkweegi\\Dropbox\\Code\\Matlab\\PPpaper\\'+name,'w') #'H:Data/BrainSim'+name,'w')	#prepare the log file for saving the simulation
+		self.file_name=open('C:\\Users\\uqkweegi\\Documents\\Data\\'+name,'w') #'H:Data/BrainSim'+name,'w')	#prepare the log file for saving the simulation
 	
 #----------------------------------------------#	
 	#destroy object

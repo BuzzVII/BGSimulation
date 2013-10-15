@@ -13,7 +13,7 @@ class CNeuralStruct:
 # This class defines an object that represents a neural nucleus. The neural nucleus is represented by a neural mass that can then be stepped forward in time using an Euler method. 	
 #----------------------------------------------#
 	#construct object
-	def __init__(self,name,parameters):
+	def __init__(self,name,parameters,path='C:\\Users\\uqkweegi\\Documents\\Data\\DAfit\\'):
 		
 		self.name=name							#set the name of the structure type
 		
@@ -21,7 +21,7 @@ class CNeuralStruct:
 		
 		self.Reset()							#set the structure to it's initial state
 		
-		self.file_name=open('C:\\Users\\uqkweegi\\Documents\\Data\\'+name,'w') #'H:Data/BrainSim'+name,'w')	#prepare the log file for saving the simulation
+		self.file_name=open(path+name,'w') #'H:Data/BrainSim'+name,'w')	#prepare the log file for saving the simulation
 	
 #----------------------------------------------#	
 	#destroy object
@@ -163,14 +163,10 @@ class CNeuralStruct:
 		return self.sigrate						#returns the sigmoidal response for the given input
 	
 #==============================================#
-def main():
+def main(DA=1, dt=1./24000, sim_time=1.):
 #==============================================#
 	#this is the main program that prepares each structure, couples them and then simulates their time evolution
 	print 'setting up simulation paramaters'
-	
-	dt 			= 	0.001	#time step
-	sim_time 	= 	0.999		#total simulation time
-	DA			= 	0.0		#dopamine level for simulation
 	
 				#This matrix represents the coupling between each strucutre, and sets the structures synaptic response
 				#	 GPi  GPe  D1  D2   STN FS  Ctx  	   Tha  TRN  tau   [Sigmoid]  R
@@ -286,7 +282,7 @@ def main():
 	
 	print 'simulation complete'
 
-	exit()
+	#exit()
 
 #----------------------------------------------#	
 if (__name__ == '__main__'):						#only runs the simulation if this file is executed (allows the class CNeuralStruct to be called by an external program

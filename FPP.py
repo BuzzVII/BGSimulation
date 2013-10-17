@@ -60,6 +60,11 @@ def FPP(N = 10000, dt = 1./24000, distributionParameter = [30], plotAll = True, 
     r.sort()
     if efield:
         rijk = [[random.uniform(0,1)-0.5 for _ in range(N)],[random.uniform(0,1)-0.5 for _ in range(N)],[random.uniform(0,1)-0.5 for _ in range(N)]] #create vector direction of field 
+        #if plotAll:
+        #    vi = pylab.plot(rijk[0])
+        #    vj = pylab.plot(rijk[1])
+        #    vk = pylab.plot(rijk[2])
+        #    pylab.show()
     R3 = 0.96e3
     C3 = 2.22e-6
     C2 = 9.38e-9
@@ -108,7 +113,7 @@ def FPP(N = 10000, dt = 1./24000, distributionParameter = [30], plotAll = True, 
         extracellular_impulse_response = np.multiply(np.multiply(np.exp(np.multiply(t_impulse,-((C2*R1*R2 + C2*R1*R3 + C2*R1*R4 - C3*R1*R3 + C3*R2*R3 + C3*R3*R4))/(2*C2*C3*R1*R3*(R2 + R4)))),(np.add(np.cosh(np.multiply(t_impulse,(C2**2*R1**2*R2**2 + 2*C2**2*R1**2*R2*R3 + 2*C2**2*R1**2*R2*R4 + C2**2*R1**2*R3**2 + 2*C2**2*R1**2*R3*R4 + C2**2*R1**2*R4**2 + 2*C2*C3*R1**2*R2*R3 - 2*C2*C3*R1**2*R3**2 + 2*C2*C3*R1**2*R3*R4 - 2*C2*C3*R1*R2**2*R3 - 2*C2*C3*R1*R2*R3**2 - 4*C2*C3*R1*R2*R3*R4 - 2*C2*C3*R1*R3**2*R4 - 2*C2*C3*R1*R3*R4**2 + C3**2*R1**2*R3**2 - 2*C3**2*R1*R2*R3**2 - 2*C3**2*R1*R3**2*R4 + C3**2*R2**2*R3**2 + 2*C3**2*R2*R3**2*R4 + C3**2*R3**2*R4**2)**(1/2)/(2*C2*C3*R1*R3*(R2 + R4)))),np.divide(np.sinh(np.multiply(t_impulse,(C2**2*R1**2*R2**2 + 2*C2**2*R1**2*R2*R3 + 2*C2**2*R1**2*R2*R4 + C2**2*R1**2*R3**2 + 2*C2**2*R1**2*R3*R4 + C2**2*R1**2*R4**2 + 2*C2*C3*R1**2*R2*R3 - 2*C2*C3*R1**2*R3**2 + 2*C2*C3*R1**2*R3*R4 - 2*C2*C3*R1*R2**2*R3 - 2*C2*C3*R1*R2*R3**2 - 4*C2*C3*R1*R2*R3*R4 - 2*C2*C3*R1*R3**2*R4 - 2*C2*C3*R1*R3*R4**2 + C3**2*R1**2*R3**2 - 2*C3**2*R1*R2*R3**2 - 2*C3**2*R1*R3**2*R4 + C3**2*R2**2*R3**2 + 2*C3**2*R2*R3**2*R4 + C3**2*R3**2*R4**2)**(1/2)/(2*C2*C3*R1*R3*(R2 + R4))))*(C2*R1*R2 - C2*R1*R3 + C2*R1*R4 + C3*R1*R3 - C3*R2*R3 - C3*R3*R4),(C2**2*R1**2*R2**2 + 2*C2**2*R1**2*R2*R3 + 2*C2**2*R1**2*R2*R4 + C2**2*R1**2*R3**2 + 2*C2**2*R1**2*R3*R4 + C2**2*R1**2*R4**2 + 2*C2*C3*R1**2*R2*R3 - 2*C2*C3*R1**2*R3**2 + 2*C2*C3*R1**2*R3*R4 - 2*C2*C3*R1*R2**2*R3 - 2*C2*C3*R1*R2*R3**2 - 4*C2*C3*R1*R2*R3*R4 - 2*C2*C3*R1*R3**2*R4 - 2*C2*C3*R1*R3*R4**2 + C3**2*R1**2*R3**2 - 2*C3**2*R1*R2*R3**2 - 2*C3**2*R1*R3**2*R4 + C3**2*R2**2*R3**2 + 2*C3**2*R2*R3**2*R4 + C3**2*R3**2*R4**2)**(1/2))))),-R4/(C2*(R2 + R4)));
         electrode_ppwave = np.convolve(ppwave,extracellular_impulse_response,'same');
         if efield:  #add fields
-            amp = 1/(rijk[0][neuron]+rijk[1][neuron]+rijk[2][neuron])
+            amp = 1/np.sqrt((np.square(rijk[0][neuron])+np.square(rijk[1][neuron])+np.square(rijk[2][neuron])))
             rijk[0][neuron] = rijk[0][neuron]*amp
             rijk[1][neuron] = rijk[1][neuron]*amp
             rijk[2][neuron] = rijk[2][neuron]*amp
@@ -158,8 +163,13 @@ def main():
         STNrate = ['/home/uqkweegi/Documents/Data/STN']
     else:
         STNrate = [float(sys.argv[2])]
-        
-    Vt,times = FPP(N, distributionParameter = STNrate)
+
+    if (len(sys.argv)>3):
+        field = sys.argv[3]=='True'
+    else
+        fiel = False
+ 
+    Vt,times = FPP(N, distributionParameter = STNrate, efield = field)
 
 
 

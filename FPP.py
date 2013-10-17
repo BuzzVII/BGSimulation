@@ -29,11 +29,11 @@ def FPP(N = 10000, dt = 1./24000, distributionParameter = [30], plotAll = True, 
             timeSteps = int(Ratetime[-1]/dt)  
         except:
             float(distributionParameter[0])
-            Ratetime = 10.
+            Ratetime = 1.
             timeSteps = int(Ratetime/dt)
             BGsim = False
     else:
-        Ratetime = 30.
+        Ratetime = 1.
         BGsim = False
         timeSteps = int(Ratetime/dt)
         
@@ -166,8 +166,8 @@ def main():
 
     if (len(sys.argv)>3):
         field = sys.argv[3]=='True'
-    else
-        fiel = False
+    else:
+        field = False
  
     Vt,times = FPP(N, distributionParameter = STNrate, efield = field)
 

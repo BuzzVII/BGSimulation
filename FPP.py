@@ -159,13 +159,13 @@ def main():
     else:
         N = int(sys.argv[1])
 
-    if (len(sys.argv)<3):
+    if (len(sys.argv)<4):
         STNrate = ['/home/uqkweegi/Documents/Data/STN']
     else:
-        STNrate = [float(sys.argv[2])]
+        STNrate = [float(sys.argv[3])]
 
-    if (len(sys.argv)>3):
-        field = sys.argv[3]=='True'
+    if (len(sys.argv)<3):
+        field = sys.argv[2]=='True'
     else:
         field = False
  

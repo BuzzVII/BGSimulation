@@ -10,14 +10,15 @@ import numpy as np
 from scipy import signal
 from matplotlib import pylab
 import random
+import Logger
 
-def FPP(N = 10000, dt = 1./24000, distributionParameter = [30], plotAll = True, efield = True):
+def FPP(log=Logger.logger(0), N = 10000, dt = 1./24000, distributionParameter = [30], plotAll = True, efield = True):
     
     #check if rate file or rate is present
     if len(distributionParameter)  ==  1:
         try: 
             data = np.loadtxt(distributionParameter[0],delimiter = ' ')
-            print "Rate data loaded"
+            log.info("Rate data loaded")
             BGsim = True
             STNdata = []
             tick = []
@@ -46,10 +47,10 @@ def FPP(N = 10000, dt = 1./24000, distributionParameter = [30], plotAll = True, 
     try:
         It = np.loadtxt('/home/uqkweegi/Documents/Data/apcurrent24k.dat',delimiter = ',')
     except:
-        print 'no current file present'
+        log.error('no current file present')
         It = np.matrix('1')
 
-    print 'Current loaded'
+    log.info('Current loaded')
     It = np.multiply(np.true_divide(It,It.min()),250e-9)          #normalize
     currentLength = len(It)
     
@@ -75,7 +76,7 @@ def FPP(N = 10000, dt = 1./24000, distributionParameter = [30], plotAll = True, 
     R1 = 2100.;
     t_impulse = np.array([dt*n for n in range(100)])
 
-    print 'initialization complete'
+    log.info('initialization complete')
 
     Vt = pylab.zeros(len(times))
     Vi = Vt
@@ -93,7 +94,7 @@ def FPP(N = 10000, dt = 1./24000, distributionParameter = [30], plotAll = True, 
             if len(distributionParameter)  ==  1:
                 absoluteTimes = np.random.exponential(1./(distributionParameter[0]),1)
             else:
-                absoluteTimes = random.weibullvariate(distributionParameter[0],distributionParameter[1])
+                absoluteTimes = [random.weibullvariate(distributionParameter[0],distributionParameter[1])]
         while absoluteTimes[-1] < times[-1]-currentLength*dt:
             wave_start = int(absoluteTimes[-1]/dt)
             wave_end = wave_start+currentLength
@@ -123,11 +124,11 @@ def FPP(N = 10000, dt = 1./24000, distributionParameter = [30], plotAll = True, 
         else:       #add scalar
             Vt = np.add(Vt,electrode_ppwave)
         if np.mod(neuron,1000) == 999:
-            print(str(neuron+1)+" neurons calculated")
+            log.info(str(neuron+1)+" neurons calculated")
     #------------------------------------------------------------------------------#        
     # end simulation
     
-    print 'neuron contribution to MER complete'
+    log.info('neuron contribution to MER complete')
     
     #remove biase
     if efield:
@@ -154,6 +155,8 @@ def main():
 
     print '\n'*100      #clear screen
     
+    log = Logger.logger(loglevel=1)
+
     if (len(sys.argv)<2 or int(sys.argv[1])<1):
         N = 10000
     else:
@@ -169,7 +172,7 @@ def main():
     else:
         field = False
  
-    Vt,times = FPP(N, distributionParameter = STNrate, efield = field)
+    Vt,times = FPP(log,N, distributionParameter = STNrate, efield = field)
 
 
 

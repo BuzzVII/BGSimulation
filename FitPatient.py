@@ -22,12 +22,12 @@ log.info('creating patient object')
 
 fileList = []
 
-for path, dirs, files in os.walk(os.path.abspath("/home/uqkweegi/Documents/Data/dbsdata/OLDMER/Patient54")):
+for path, dirs, files in os.walk(os.path.abspath("/home/uqkweegi/Documents/Data/dbsdata/OLDMER/Patient38")):
     for filename in fnmatch.filter(files,"*.wav"):
         fileList.append(os.path.join(path, filename))
 
 
-fid = open('/home/uqkweegi/Documents/Data/leastsq54.xml','w')
+fid = open('/home/uqkweegi/Documents/Data/leastsq38.xml','w')
 
 fid.write('<?xml version="1.0" encoding="UTF-8" ?>\n')
 

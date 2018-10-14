@@ -22,6 +22,7 @@ class Patient:
         self.log.info('patient loaded')
         self.nfft=2**int(math.log(len(self.Vt),2))+1
         self.Pxx,self.freqs=pylab.psd(x=self.Vt,Fs=self.sr,NFFT=self.nfft,window=pylab.window_none, noverlap=1)   
+        self.bartlet = self.Pxx
         self.log.info('patient initialized')
 
     # find the L2 difference between the FPP simulation and patient PSDs
@@ -37,3 +38,7 @@ class Patient:
         #pylab.plot(self.freqs)
         #pylab.show()
         return np.subtract(self.Pxx[37:3300],10000*Pxi[37:3300])
+
+    def recalcBartlet(self,current):
+        curentPSD,freqs = pylab.psd(x=current,Fs=self.sr,NFFT=self.nfft,window=pylab.window_none, noverlap=1)
+        self.bartlet = np.divide(np.divide(self.Pxx,np.sum(self.Pxx)),np.divide(curentPSD,np.sum(curentPSD)))

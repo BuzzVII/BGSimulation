@@ -6,7 +6,7 @@
 import numpy as np
 from matplotlib import pylab
 
-data = np.loadtxt('h:\data\BrainSimSTN',delimiter=' ')
+data = np.loadtxt('C:\\Users\\Kristian\\Dropbox\\phd\\Data\\STN',delimiter=' ')
 
 STNdata=[]
 tick=[]
@@ -15,7 +15,7 @@ for n in data:
 	STNdata.append(n[1])
 	tick.append(n[0])
 
-data = np.loadtxt('h:\data\BrainSimGPe',delimiter=' ')
+data = np.loadtxt('C:\\Users\\Kristian\\Dropbox\\phd\\Data\\GPe',delimiter=' ')
 
 GPedata=[]
 

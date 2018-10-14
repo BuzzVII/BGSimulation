@@ -7,27 +7,32 @@ import math
 import numpy as np
 import numpy.random
 
+
 #----------------------------------------------#
 class CNeuralStruct:
 #----------------------------------------------#
 # This class defines an object that represents a neural nucleus. The neural nucleus is represented by a neural mass that can then be stepped forward in time using an Euler method. 	
 #----------------------------------------------#
 	#construct object
-	def __init__(self,name,parameters,path='C:\\Users\\uqkweegi\\Documents\\Data\\DAfit\\'):
+	def __init__(self,name,parameters,path='C:\\Users\\Kristian\\Dropbox\\phd\\Data\\'):
 		
 		self.name=name							#set the name of the structure type
 		
 		self.paramInit(parameters)				#set all the parameters for coupling each structure
 		
 		self.Reset()							#set the structure to it's initial state
-		
-		self.file_name=open(path+name,'w') #'H:Data/BrainSim'+name,'w')	#prepare the log file for saving the simulation
+		try:
+			self.file_name=open(path+name,'w') #'H:Data/BrainSim'+name,'w')	#prepare the log file for saving the simulation
+			print('log file '+path+name+' opened')
+		except:
+			print('could not open '+path+name)
+			exit(1)
 	
 #----------------------------------------------#	
 	#destroy object
 	def __del__(self):
 		try:
-			self.file_name.close()						#if the log file has been open for writting, close it
+			self.file_name.close()						#if the log file has been open for writing, close it
 			print ('log file for '+self.name+' closed')
 		except:											 
 			print ('no log file open for '+self.name)	#inform user that the log file wasn't open for this object

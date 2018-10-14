@@ -11,8 +11,9 @@ from scipy import signal
 from matplotlib import pylab
 import random
 import Logger
+import math
 
-def FPP(log=Logger.logger(0), N = 10000, dt = 1./24000, distributionParameter = [30], plotAll = True, efield = True):
+def FPP(log=Logger.logger(0), N = 10000, dt = 1./24000, distributionParameter = [30], plotAll = True, efield = False):
     
     #check if rate file or rate is present
     if len(distributionParameter)  ==  1:
@@ -45,10 +46,12 @@ def FPP(log=Logger.logger(0), N = 10000, dt = 1./24000, distributionParameter = 
 
     # check for current file, if none present use impules
     try:
-        It = np.loadtxt('/home/uqkweegi/Documents/Data/apcurrent24k.dat',delimiter = ',')
+        It = np.loadtxt('C:\\Users\\Kristian\\Dropbox\\phd\\Data\\apcurrent24k.dat',delimiter = ',')
+
+        #/home/uqkweegi/Documents/Data/apcurrent24k.dat',delimiter = ',')
     except:
         log.error('no current file present')
-        It = np.matrix('1')
+        It = np.array(1)
 
     log.info('Current loaded')
     It = np.multiply(np.true_divide(It,It.min()),250e-9)          #normalize
@@ -130,7 +133,7 @@ def FPP(log=Logger.logger(0), N = 10000, dt = 1./24000, distributionParameter = 
     
     log.info('neuron contribution to MER complete')
     
-    #remove biase
+    #remove bias
     if efield:
         Vt = np.sqrt(np.add(np.square(Vi),np.square(Vj),np.square(Vk)))   
     Vt = np.subtract(Vt,np.mean(Vt))
@@ -149,6 +152,13 @@ def FPP(log=Logger.logger(0), N = 10000, dt = 1./24000, distributionParameter = 
         if BGsim:
             stnrate = pylab.plot(Ratetime,np.multiply(STNdata,200))
         pylab.show()
+        nfft=2**int(math.log(len(Vt),2))+1
+        sr = 1/dt
+        Pxi,freqs=pylab.psd(x=Vt,Fs=sr,NFFT=nfft/10,window=pylab.window_none, noverlap=100)
+        pylab.show()
+        return freqs, Pxi
+        psd = pylab.loglog(freqs, Pxi)
+        pylab.show()
     return Vt, times
     
 def main():
@@ -163,16 +173,16 @@ def main():
         N = int(sys.argv[1])
 
     if (len(sys.argv)<4):
-        STNrate = ['/home/uqkweegi/Documents/Data/STN']
+        STNrate = ['C:\\Users\\Kristian\\Dropbox\\phd\\Data\\STN']
     else:
         STNrate = [float(sys.argv[3])]
 
-    if (len(sys.argv)<3):
-        field = sys.argv[2]=='True'
-    else:
-        field = False
+    #if (len(sys.argv)<3):
+    #    field = sys.argv[2]=='True'
+    #else:
+    field = False
  
-    Vt,times = FPP(log,N, distributionParameter = STNrate, efield = field)
+    Vt,times = FPP(log,N, distributionParameter = STNrate, efield = field, plotAll = True)
 
 
 
